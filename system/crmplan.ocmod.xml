@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>CRMplan Module</name>
+	<code>crmplan</code>
+	<version>1.2</version>
+	<author>smartcoder</author>
+	<link>http://smart-coder.ru</link>
+
+
+	<!-- ADMIN PANEL -->
+	<file path="admin/controller/common/dashboard.php">
+		<operation>
+			<search trim="true">
+				<![CDATA[public function index() {]]>
+			</search>
+			<add position="after"><![CDATA[
+
+				/*
+				|--------------------------------------------------------------------------
+				| CRMPLAN MODIFICATION
+				|--------------------------------------------------------------------------
+				|
+				*/
+					#	Languages
+					$this->load->language('smartcoder/crmplan');
+					$data = $this->language->all();
+
+					#	Styles
+					$this->document->addStyle('view/template/smartcoder/assets/plugins/owlcarousel2/owl.carousel.min.css');
+					$this->document->addStyle('view/template/smartcoder/assets/plugins/owlcarousel2/owl.theme.default.min.css');
+
+					#	Scripts
+					$this->document->addScript('view/template/smartcoder/assets/plugins/owlcarousel2/owl.carousel.min.js');
+
+					$this->load->model('user/user');
+					$data['user_info'] = $this->model_user_user->getUser($this->user->getId());
+
+					$data['module_link'] = $this->url->link('smartcoder/crmplan', 'token=' . $this->session->data['token']);
+					$data['module_link_add'] = $this->url->link('smartcoder/crmplan/add', 'token=' . $this->session->data['token']);
+					$data['module_link_edit'] = $this->url->link('smartcoder/crmplan/edit', 'token=' . $this->session->data['token']);
+
+					#	USER CONFIG
+					$this->load->model('setting/setting');
+					$config = $this->model_setting_setting->getSetting('crmplan');
+
+					$data['config'] = array();
+					if (isset($config['crmplan']['config'])) {
+						$data['config'] = $config['crmplan']['config'];
+					}
+
+
+
+					$this->load->model('smartcoder/crmplan');
+					$data['crm_leads'] = $this->model_smartcoder_crmplan->getItems(array('table' => 'crmplan', 'order' => 'DESC', 'status_no_complite' => 1));
+					$data['crm_tasks'] = $this->model_smartcoder_crmplan->getItems(array('table' => 'crmplan_tasks' ,'order' => 'DESC', 'status_no_complite' => 1));
+					$data['crm_costs'] = $this->model_smartcoder_crmplan->getItems(array('table' => 'crmplan_costs' ,'order' => 'DESC', 'status_no_complite' => 1));
+
+
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="admin/view/template/common/dashboard.tpl">
+		<operation>
+			<search trim="true">
+				<![CDATA[<?php foreach ($rows as $row) { ?>]]>
+			</search>
+			<add position="before"><![CDATA[
+
+			<!-- ****************************************** -->
+			<!-- 			CRMPLAN MODIFICATION 			-->
+			<!-- ****************************************** -->
+
+
+			<?php if ((isset($config['main']['show_on_dashboard']) && $config['main']['show_on_dashboard'] == 'show')) { ?>
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab-trade" data-toggle="tab"><?php echo $tab_leads; ?> <span class="label <?php if ($crm_leads) { ?>label-warning<?php } else { ?>label-success<?php } ?>"><?php echo count($crm_leads); ?></span></a> </li>
+				<li><a href="#tab-tasks" data-toggle="tab"><?php echo $tab_tasks; ?> <span class="label <?php if ($crm_tasks) { ?>label-warning<?php } else { ?>label-success<?php } ?>"><?php echo count($crm_tasks); ?></span></a> </li>
+				<li><a href="#tab-costs" data-toggle="tab"><?php echo $tab_costs; ?> <span class="label <?php if ($crm_costs) { ?>label-warning<?php } else { ?>label-success<?php } ?>"><?php echo count($crm_costs); ?></span></a> </li>
+				<a class="btn btn-default" href="<?php echo $module_link; ?>">CRMPLAN</a>
+         	</ul>
+
+         	<div class="row">
+
+
+				<div class="tab-content">
+
+					<div class="tab-pane active" id="tab-trade">
+						<div class="owl-carousel owl-theme">
+							<?php if ($crm_leads) { ?>
+								<?php foreach ($crm_leads as $crm_lead) { ?>
+
+										<div class="item" style=" outline: 1px solid rgba(208, 208, 208, 0.8); outline-offset: -15px; padding: 28px;">
+
+											<div style="text-align:right; color:#d2d2d2;">
+												<?php echo $crm_lead['created_at']; ?>
+											</div>
+
+											<div>
+												<h4><?php echo $crm_lead['name']; ?></h4>
+												<?php echo htmlspecialchars_decode(substr($crm_lead['description'], 0, 200)) ?>..
+											</div>
+											<hr>
+
+											<select name="status" data-item_id="<?php echo $crm_lead['id']; ?>" class="js-status-select form-control">
+												<option value="1"  <?php if ($crm_lead['status'] == 1) { ?>selected="selected"<?php } ?>><?php echo $text_status_1; ?></option>
+												<option value="2"  <?php if ($crm_lead['status'] == 2) { ?>selected="selected"<?php } ?>><?php echo $text_status_2; ?></option>
+												<option value="3"  <?php if ($crm_lead['status'] == 3) { ?>selected="selected"<?php } ?>><?php echo $text_status_3; ?></option>
+												<option value="4"  <?php if ($crm_lead['status'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
+												<option value="5"  <?php if ($crm_lead['status'] == 5) { ?>selected="selected"<?php } ?>><?php echo $text_status_5; ?></option>
+											</select>
+
+
+											<div class="resp"></div>
+											<br>
+											<a href="<?php echo $module_link_edit; ?>&id=<?php echo $crm_lead['id']; ?>" class="btn btn-info btn-sm">Подробнее</a>
+										</div>
+
+								<?php } ?>
+							<?php } else { ?>
+								<div class="container"><?php echo $text_no_results; ?></div>
+							<?php } ?>
+						</div>
+					</div>
+
+					<div class="tab-pane" id="tab-tasks">
+						<div class="owl-carousel owl-theme">
+							<?php if ($crm_tasks) { ?>
+								<?php foreach ($crm_tasks as $crm_task) { ?>
+
+										<div class="item" style=" outline: 1px solid rgba(208, 208, 208, 0.8); outline-offset: -15px; padding: 28px;">
+
+											<div style="text-align:right; color:#d2d2d2;">
+												<?php echo $crm_task['created_at']; ?>
+											</div>
+
+											<div>
+												<h4><?php echo $crm_task['name']; ?></h4>
+												<?php echo htmlspecialchars_decode(substr($crm_task['description'], 0, 200)) ?>..
+											</div>
+											<hr>
+
+											<select name="status" data-item_id="<?php echo $crm_task['id']; ?>" class="js-status-select form-control">
+												<option value="6"  <?php if ($crm_task['status'] == 6) { ?>selected="selected"<?php } ?>><?php echo $text_status_6; ?></option>
+												<option value="4"  <?php if ($crm_task['status'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
+												<option value="5"  <?php if ($crm_task['status'] == 5) { ?>selected="selected"<?php } ?>><?php echo $text_status_5; ?></option>
+											</select>
+
+
+											<div class="resp"></div>
+											<br>
+											<a href="<?php echo $module_link_edit; ?>&table=crmplan_tasks&id=<?php echo $crm_task['id']; ?>" class="btn btn-info btn-sm">Подробнее</a>
+										</div>
+
+								<?php } ?>
+							<?php } else { ?>
+								<div class="container"><?php echo $text_no_results; ?></div>
+							<?php } ?>
+						</div>
+					</div>
+
+					<div class="tab-pane" id="tab-costs">
+						<div class="owl-carousel owl-theme">
+							<?php if ($crm_costs) { ?>
+								<?php foreach ($crm_costs as $crm_cost) { ?>
+
+										<div class="item" style=" outline: 1px solid rgba(208, 208, 208, 0.8); outline-offset: -15px; padding: 28px;">
+
+											<div style="text-align:right; color:#d2d2d2;">
+												<?php echo $crm_cost['created_at']; ?>
+											</div>
+
+											<div>
+												<h4><?php echo $crm_cost['name']; ?></h4>
+												<?php echo htmlspecialchars_decode(substr($crm_cost['description'], 0, 200)) ?>..
+											</div>
+											<hr>
+
+											<select name="status" data-item_id="<?php echo $crm_cost['id']; ?>" class="js-status-select form-control">
+												<option value="6"  <?php if ($crm_cost['status'] == 6) { ?>selected="selected"<?php } ?>><?php echo $text_status_6; ?></option>
+												<option value="4"  <?php if ($crm_cost['status'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
+												<option value="5"  <?php if ($crm_cost['status'] == 5) { ?>selected="selected"<?php } ?>><?php echo $text_status_5; ?></option>
+											</select>
+
+
+											<div class="resp"></div>
+											<br>
+											<a href="<?php echo $module_link_edit; ?>&table=crmplan_tasks&id=<?php echo $crm_cost['id']; ?>" class="btn btn-info btn-sm">Подробнее</a>
+										</div>
+
+								<?php } ?>
+							<?php } else { ?>
+								<div class="container"><?php echo $text_no_results; ?></div>
+							<?php } ?>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+			<hr>
+			<?php } ?>
+         	]]></add>
+		</operation>
+
+
+
+		<operation>
+			<search trim="true">
+				<![CDATA[<?php echo $footer; ?>]]>
+			</search>
+			<add position="before"><![CDATA[
+
+				<script>
+					$(document).ready(function(){
+						$('.owl-carousel').owlCarousel({
+							margin:10,
+							nav:false,
+							responsive:{
+								0:{
+									items:1
+								},
+								600:{
+									items:3
+								},
+								1000:{
+									items:5
+								}
+							}
+						})
+					});
+				</script>
+
+
+
+				<script type="text/javascript">
+					$(document).ready(function () {
+					    $('.js-status-select').on('change', function (e) {
+							var f = $(this).parent().parent();
+
+							var post_data = {
+								status: $(this).val(),
+								id: $(this).attr('data-item_id')
+							}
+
+							$.ajax({
+								url: './index.php?route=smartcoder/crmplan/checkStatus&token=<?php echo $_GET['token']; ?>',
+								type: 'post',
+								data: post_data,
+								dataType: 'json',
+								success: function(json) {
+
+									if (json['error']) {
+										f.find('.resp').removeClass("text-success");
+										f.find('.resp').addClass("text-danger");
+										f.find('.resp').html(json['error']);
+									}
+
+									if (json['success']) {
+										f.find('.resp').removeClass("text-danger");
+										f.find('.resp').addClass("text-success");
+										f.find('.resp').html(json['success']);
+									}
+
+									setTimeout(function(){
+									  f.find('.resp').html('');
+									}, 2000);
+
+								}
+							});
+						});
+					});
+
+				</script>
+
+
+
+			]]></add>
+		</operation>
+	</file>
+
+
+
+
+</modification>
