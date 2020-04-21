@@ -18,7 +18,7 @@ class ControllerSmartcoderCrmplan extends Controller {
     |--------------------------------------------------------------------------
     |
     */
-    private $version = 1.3;
+    private $version = 1.4;
     private $module_name = 'crmplan';
     private $module_folder = 'smartcoder/crmplan';
     private $admin_token;
