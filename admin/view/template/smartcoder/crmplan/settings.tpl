@@ -13,8 +13,6 @@
                         <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
                     <?php } ?>
                 </ul>
-                <br>
-                <?php require(DIR_TEMPLATE.'smartcoder/crmplan/menu.tpl'); ?>
             </div>
         </div>
         <div class="container-fluid">

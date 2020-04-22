@@ -10,8 +10,6 @@
                     <?php } ?>
                 </ul>
 
-                <br>
-                <?php require(DIR_TEMPLATE.'smartcoder/crmplan/menu.tpl'); ?>
 
             </div>
         </div>
@@ -163,7 +161,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header">
-                            <h3 class="block-title"><?php echo $text_customers; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_customers; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_customers; ?></p>
@@ -174,7 +172,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header bg-modern">
-                            <h3 class="block-title"><?php echo $text_leads; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_leads; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_leads; ?></p>
@@ -185,7 +183,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header bg-modern">
-                            <h3 class="block-title"><?php echo $text_sum_leads; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_sum_leads; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_sum_leads; ?> <?php echo $currency; ?></p>
@@ -196,7 +194,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header bg-city">
-                            <h3 class="block-title"><?php echo $text_costs; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_costs; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_costs; ?></p>
@@ -207,7 +205,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header bg-city">
-                            <h3 class="block-title"><?php echo $text_costs_leads; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_costs_leads; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_sum_costs; ?> <?php echo $currency; ?></p>
@@ -218,7 +216,7 @@
                 <div class="col-md-2 col-xl-2">
                     <div class="block block-themed">
                         <div class="block-header bg-info">
-                            <h3 class="block-title"><?php echo $text_profit; ?> <?php echo $word_period; ?></h3>
+                            <h3 class="block-title"><?php echo $text_profit; ?> </h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-h2 font-w400 text-dark"><?php echo $total_sum_profit; ?> <?php echo $currency; ?></p>

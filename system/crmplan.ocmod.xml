@@ -2,9 +2,68 @@
 <modification>
 	<name>CRMplan Module</name>
 	<code>crmplan</code>
-	<version>1.2</version>
+	<version>1.4</version>
 	<author>smartcoder</author>
 	<link>http://smart-coder.ru</link>
+
+
+	<!-- install in menu for opencart 2.3 - 3.0 -->
+	<file path="admin/controller/common/column_left.php">
+		<operation>
+			<search trim="true">
+				<![CDATA[$catalog = array();]]>
+			</search>
+			<add position="before"><![CDATA[
+                # crmplan modification begin
+                if (version_compare(VERSION, '3.0.0') >= 0) {
+                    $token = 'user_token=' . $this->session->data['user_token'];
+                } else {
+                    $token = 'token=' . $this->session->data['token'];
+                }
+                if ($this->user->hasPermission('access', 'smartcoder/crmplan')) {
+                    $crmplan = array();
+
+                    $crmplan[] = array(
+                        'name'     => 'Основное',
+                        'href'     => $this->url->link('smartcoder/crmplan', $token, true),
+                        'children' => array()
+                    );
+                    $crmplan[] = array(
+                        'name'     => 'Сделки',
+                        'href'     => $this->url->link('smartcoder/crmplan/leads', $token, true),
+                        'children' => array()
+                    );
+                    $crmplan[] = array(
+                        'name'     => 'Задания',
+                        'href'     => $this->url->link('smartcoder/crmplan/tasks', $token, true),
+                        'children' => array()
+                    );
+                    $crmplan[] = array(
+                        'name'     => 'Расходы',
+                        'href'     => $this->url->link('smartcoder/crmplan/costs', $token, true),
+                        'children' => array()
+                    );
+                    $crmplan[] = array(
+                        'name'     => 'Настройки',
+                        'href'     => $this->url->link('smartcoder/crmplan/settings', $token, true),
+                        'children' => array()
+                    );
+
+                    if ($crmplan) {
+						$data['menus'][] = array(
+							'id'       => 'menu-catalog',
+							'icon'	   => 'fa-briefcase',
+							'name'	   => 'CRMplan',
+							'href'     => '',
+							'children' => $crmplan
+						);
+					}
+
+                }
+                # crmplan modification end
+        ]]></add>
+		</operation>
+	</file>
 
 
 	<!-- ADMIN PANEL -->
@@ -97,12 +156,12 @@
 											</div>
 
 											<div>
-												<h4><?php echo $crm_lead['name']; ?></h4>
-												<?php echo htmlspecialchars_decode(substr($crm_lead['description'], 0, 200)) ?>..
+												<h4 style="word-wrap: break-word;"><?php echo $crm_lead['name']; ?></h4>
+												<div style="word-wrap: break-word;"><?php echo htmlspecialchars_decode(substr($crm_lead['description'], 0, 70)) ?>..</div>
 											</div>
 											<hr>
 
-											<select name="status" data-item_id="<?php echo $crm_lead['id']; ?>" class="js-status-select form-control">
+											<select name="status" data-item_id="<?php echo $crm_lead['id']; ?>" data-table="crmplan" class="js-status-select form-control">
 												<option value="1"  <?php if ($crm_lead['status'] == 1) { ?>selected="selected"<?php } ?>><?php echo $text_status_1; ?></option>
 												<option value="2"  <?php if ($crm_lead['status'] == 2) { ?>selected="selected"<?php } ?>><?php echo $text_status_2; ?></option>
 												<option value="3"  <?php if ($crm_lead['status'] == 3) { ?>selected="selected"<?php } ?>><?php echo $text_status_3; ?></option>
@@ -135,12 +194,13 @@
 											</div>
 
 											<div>
-												<h4><?php echo $crm_task['name']; ?></h4>
-												<?php echo htmlspecialchars_decode(substr($crm_task['description'], 0, 200)) ?>..
+												<h4 style="word-wrap: break-word;"><?php echo $crm_task['name']; ?></h4>
+												<div style="word-wrap: break-word;"><?php echo htmlspecialchars_decode(substr($crm_task['description'], 0, 70)) ?>..</div>
 											</div>
+
 											<hr>
 
-											<select name="status" data-item_id="<?php echo $crm_task['id']; ?>" class="js-status-select form-control">
+											<select name="status" data-item_id="<?php echo $crm_task['id']; ?>" data-table="crmplan_tasks" class="js-status-select form-control">
 												<option value="6"  <?php if ($crm_task['status'] == 6) { ?>selected="selected"<?php } ?>><?php echo $text_status_6; ?></option>
 												<option value="4"  <?php if ($crm_task['status'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
 												<option value="5"  <?php if ($crm_task['status'] == 5) { ?>selected="selected"<?php } ?>><?php echo $text_status_5; ?></option>
@@ -171,12 +231,12 @@
 											</div>
 
 											<div>
-												<h4><?php echo $crm_cost['name']; ?></h4>
-												<?php echo htmlspecialchars_decode(substr($crm_cost['description'], 0, 200)) ?>..
+												<h4 style="word-wrap: break-word;"><?php echo $crm_cost['name']; ?></h4>
+												<div style="word-wrap: break-word;"><?php echo htmlspecialchars_decode(substr($crm_cost['description'], 0, 70)) ?>..</div>
 											</div>
 											<hr>
 
-											<select name="status" data-item_id="<?php echo $crm_cost['id']; ?>" class="js-status-select form-control">
+											<select name="status" data-item_id="<?php echo $crm_cost['id']; ?>" data-table="crmplan_costs" class="js-status-select form-control">
 												<option value="6"  <?php if ($crm_cost['status'] == 6) { ?>selected="selected"<?php } ?>><?php echo $text_status_6; ?></option>
 												<option value="4"  <?php if ($crm_cost['status'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
 												<option value="5"  <?php if ($crm_cost['status'] == 5) { ?>selected="selected"<?php } ?>><?php echo $text_status_5; ?></option>
@@ -185,7 +245,7 @@
 
 											<div class="resp"></div>
 											<br>
-											<a href="<?php echo $module_link_edit; ?>&table=crmplan_tasks&id=<?php echo $crm_cost['id']; ?>" class="btn btn-info btn-sm">Подробнее</a>
+											<a href="<?php echo $module_link_edit; ?>&table=crmplan_costs&id=<?php echo $crm_cost['id']; ?>" class="btn btn-info btn-sm">Подробнее</a>
 										</div>
 
 								<?php } ?>
@@ -241,7 +301,8 @@
 
 							var post_data = {
 								status: $(this).val(),
-								id: $(this).attr('data-item_id')
+								id: $(this).attr('data-item_id'),
+								table: $(this).attr('data-table')
 							}
 
 							$.ajax({

@@ -7,7 +7,9 @@
  *  @copyright www.smart-coder.ru
  */
 
-class ControllerSmartcoderCrmplan extends Controller {
+require_once DIR_SYSTEM.'library/smartcoder/opencart/CrudController.php';
+
+class ControllerSmartcoderCrmplan extends CrudController {
 
 
     private $error = array();
@@ -42,14 +44,10 @@ class ControllerSmartcoderCrmplan extends Controller {
         $this->document->addStyle('view/template/smartcoder/assets/plugins/sweetalert2/sweetalert2.css');
         $this->document->addStyle('view/template/smartcoder/assets/plugins/bootstrap-taginsput/bootstrap-tagsinput.css');
 
-//        $this->document->addStyle('view/template/smartcoder/assets/plugins/select2/css/select2.min.css');
-
         #	Scripts
         $this->document->addScript('view/template/smartcoder/assets/plugins/sweetalert2/sweetalert2.min.js');
         $this->document->addScript('view/template/smartcoder/assets/plugins/chart.js/Chart.js');
         $this->document->addScript('view/template/smartcoder/assets/plugins/bootstrap-taginsput/bootstrap-tagsinput.js');
-
-//        $this->document->addScript('view/template/smartcoder/assets/plugins/select2/js/select2.full.min.js');
 
 
         #   Token and Url
@@ -196,6 +194,17 @@ class ControllerSmartcoderCrmplan extends Controller {
         $data = array_merge($this->links(),$this->languages(),$this->config());
         return $data;
     }
+
+    public function form_config($id = false)
+    {
+        return [];
+    }
+
+    public function list_config()
+    {
+        return [];
+    }
+
 
     ####################################################################
 
@@ -854,7 +863,9 @@ class ControllerSmartcoderCrmplan extends Controller {
 	protected function getForm($table=false)
     {
         if (!$table) $table = $this->module_name;
+
         $data = $this->load_module_data();
+        $data['table'] = $table;
 
         //  Form links
         $data['add_link'] = $this->url->link($this->module_folder.'/add&table='.$table, $this->admin_token, 'SSL');
@@ -906,12 +917,8 @@ class ControllerSmartcoderCrmplan extends Controller {
             $data['types'] = array();
         }
 
-		//var_dump($table);die;
-
 
 		$data['token'] = $this->session->data['token'];
-
-
 
 
 		//  Tab-history
@@ -951,6 +958,7 @@ class ControllerSmartcoderCrmplan extends Controller {
                 $data['columns'][$key]['translate'] = $this->language->get('column_'.$column) ? $this->language->get('column_'.$column) : $column;
 		    }
         }
+
 
         #   Картинка
         if (isset($item_info['image'])) {

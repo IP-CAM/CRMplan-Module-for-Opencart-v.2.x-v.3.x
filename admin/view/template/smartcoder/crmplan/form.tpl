@@ -12,8 +12,6 @@
         <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
         <?php } ?>
       </ul>
-        <br>
-        <?php require(DIR_TEMPLATE.'smartcoder/crmplan/menu.tpl'); ?>
     </div>
   </div>
   <div class="container-fluid">
@@ -32,14 +30,17 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
                 <?php if ($customer_id) { ?><li><a href="#tab-customer" data-toggle="tab"><?php echo $tab_customer; ?></a></li><?php } ?>
-                <?php if (isset($_GET['id']) and $table == 'crmplan') { ?><li><a href="#tab-history" data-toggle="tab"><?php echo $tab_history; ?></a></li><?php } ?>
+
+                <?php if (isset($_GET['id'])) { ?>
+                    <li><a href="#tab-history" data-toggle="tab"><?php echo $tab_history; ?></a></li>
+                <?php } ?>
             </ul>
 
 
           <div class="tab-content">
             <div class="tab-pane active" id="tab-general">
-              
-              
+
+
 
                 <fieldset>
 
@@ -102,7 +103,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"><?php echo $column_description; ?></label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" name="<?php echo $column['name']; ?>"></textarea>
+                                    <textarea class="form-control" name="<?php echo $column['name']; ?>"><?php echo $column['value']; ?></textarea>
                                 </div>
                             </div>
 
@@ -112,6 +113,7 @@
                                 <label class="col-sm-2 control-label"><?php echo $column['translate']; ?></label>
                                 <div class="col-sm-10">
                                     <select name="status" id="input-status" class="form-control">
+
                                         <?php if ($table != 'crmplan') { ?>
                                             <option value="6"  <?php if ($column['value'] == 6) { ?>selected="selected"<?php } ?>><?php echo $text_status_6; ?></option>
                                             <option value="4"  <?php if ($column['value'] == 4) { ?>selected="selected"<?php } ?>><?php echo $text_status_4; ?></option>
