@@ -7,9 +7,7 @@
  *  @copyright www.smart-coder.ru
  */
 
-require_once DIR_SYSTEM.'library/smartcoder/opencart/CrudController.php';
-
-class ControllerSmartcoderCrmplan extends CrudController {
+class ControllerSmartcoderCrmplan extends Controller {
 
 
     private $error = array();
@@ -44,10 +42,14 @@ class ControllerSmartcoderCrmplan extends CrudController {
         $this->document->addStyle('view/template/smartcoder/assets/plugins/sweetalert2/sweetalert2.css');
         $this->document->addStyle('view/template/smartcoder/assets/plugins/bootstrap-taginsput/bootstrap-tagsinput.css');
 
+//        $this->document->addStyle('view/template/smartcoder/assets/plugins/select2/css/select2.min.css');
+
         #	Scripts
         $this->document->addScript('view/template/smartcoder/assets/plugins/sweetalert2/sweetalert2.min.js');
         $this->document->addScript('view/template/smartcoder/assets/plugins/chart.js/Chart.js');
         $this->document->addScript('view/template/smartcoder/assets/plugins/bootstrap-taginsput/bootstrap-tagsinput.js');
+
+//        $this->document->addScript('view/template/smartcoder/assets/plugins/select2/js/select2.full.min.js');
 
 
         #   Token and Url
@@ -194,17 +196,6 @@ class ControllerSmartcoderCrmplan extends CrudController {
         $data = array_merge($this->links(),$this->languages(),$this->config());
         return $data;
     }
-
-    public function form_config($id = false)
-    {
-        return [];
-    }
-
-    public function list_config()
-    {
-        return [];
-    }
-
 
     ####################################################################
 
